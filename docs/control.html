@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Motor</title>
+    <link rel="stylesheet" href="../css/motor.css">
+</head>
+<body>
+    <form action="" name="MyForm" class="form">
+        <h1 class="form_title">Sistema de Monitoreo y Control</h1>
+        <center>
+            <h2>Datos Actuales</h2>
+            <p class="texto">Temperatura: <strong id="tempe"></strong>°C</p>
+            <p class="texto">Humedad: <strong id="hume"></strong>%</p>
+            <button type="button" class="reload" onclick="getdata();">Actualizar Datos</button>
+        </center>
+        <input type="number" min="1" max="360" name="txt1" id="tx1" class="form_input">
+        <label for="" class="form_label">Grados Servo</label>
+        <button id="BtnEnviar" class="form_submit">Mover</button>
+    </form>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyCfxsSJKNL0p6jlgaoRUuoqAb_-QASbXb0",
+    authDomain: "control-y-monitoreo-de-motor.firebaseapp.com",
+    databaseURL: "https://control-y-monitoreo-de-motor-default-rtdb.firebaseio.com",
+    projectId: "control-y-monitoreo-de-motor",
+    storageBucket: "control-y-monitoreo-de-motor.appspot.com",
+    messagingSenderId: "612139493061",
+    appId: "1:612139493061:web:76257ab1e319d7921db2ac",
+    measurementId: "G-FMG31GF7MK"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+<script src="../control.js"></script>
+    <script>
+        var db = firebase.database().ref('home');
+        // último estado
+        db.on('value', function(data){
+           console.log("data: ", data.val());
+           $("#checkLedA").prop('checked', data.val().led1); 
+           document.getElementById('Tempe').innerHTML= "Temperatura: " + data.val().Tempe + "°c";
+        });
+        $("#checkLedA").click(function(){
+          var estado = $(this).is(':checked');
+          db.update({
+            led1:estado
+          });
+        });
+    </script>
+</body>
+</html>
